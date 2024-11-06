@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function toggleAddForm() {
+            const addForm = document.getElementById("add-item-form");
+            addForm.style.display = addForm.style.display === "none" ? "block" : "none";
+        }
+
+        function toggleEditForm(itemId) {
+            const form = document.getElementById(`edit-form-${itemId}`);
+            form.style.display = form.style.display === "none" ? "table-row" : "none";
+        }
+
+        function confirmDelete(itemId) {
+            if (confirm("Are you sure you want to delete this item?")) {
+                document.getElementById(`delete-form-${itemId}`).submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ username }}!</h2>
+        <h3>Your Inventory</h3>
+        
+        <button onclick="toggleAddForm()" class="btn primary">Add New Item</button>
+
+        <form id="add-item-form" action="{{ url_for('create_item') }}" method="POST" style="display: none; margin-top: 1rem;">
+            <h4>Add New Item</h4>
+            <label for="name">Name:</label>
+            <input type="text" name="name" required>
+
+            <label for="description">Description:</label>
+            <input type="text" name="description">
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" name="quantity" required>
+
+            <label for="price">Price:</label>
+            <input type="number" step="0.01" name="price" required>
+
+            <button type="submit">Add Item</button>
+            <button type="button" onclick="toggleAddForm()">Cancel</button>
+        </form>
+
+        <table class="inventory-table">
+          <thead>
+              <tr>
+                  <th>Item Name</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for item in items %}
+              <tr>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.description }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>${{ item.price }}</td>
+                  <td>
+                      <form action="{{ url_for('update_item', item_id=item.id) }}" method="POST" style="display: inline;">
+                          <button class="btn secondary" type="submit">Edit</button>
+                      </form>
+                      <form action="{{ url_for('delete_item', item_id=item.id) }}" method="POST" style="display: inline;">
+                          <button class="btn secondary" type="submit">Delete</button>
+                      </form>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      
+
+        <a href="{{ url_for('logout') }}" class="btn secondary">Logout</a>
+    </div>
+</body>
+</html>

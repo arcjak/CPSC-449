@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventoryApp Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome to InventoryApp</h1>
+            <p>Created by CPSC 449 Group 4</p>
+            <div class="button-container">
+                <a href="{{ url_for('register') }}" class="btn primary">Register</a>
+                <a href="{{ url_for('login') }}" class="btn secondary">Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
